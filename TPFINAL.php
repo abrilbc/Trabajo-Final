@@ -177,6 +177,34 @@ function escribirResumenJugador($arreglo, $nombre)
     echo "***************************************************\n";
 }
 
+function esPalabra($cadena)
+{
+    //int $cantCaracteres, $i, boolean $esLetra
+    $cantCaracteres = strlen($cadena);
+    $esLetra = true;
+    $i = 0;
+    while ($esLetra && $i < $cantCaracteres) {
+        $esLetra =  ctype_alpha($cadena[$i]);
+        $i++;
+    }
+    return $esLetra;
+}
+
+function solicitarJugador(){
+    echo "Ingrese el nombre del Jugador: ";
+    $jug=trim(fgets(STDIN));
+    $esCaracter=esPalabra($jug);
+    while(!($esCaracter)) {
+        echo "La palabra ingresado no es string. Ingrese el nombre del Jugador nuevamente: ";
+        $jug=trim(fgets(STDIN));
+        $esCaracter=esPalabra($jug);
+    }
+
+    return strtolower($jug);
+}
+
+
+
 function palabraElegida() {
     $cont=0;
     while($cont==1){
@@ -244,6 +272,12 @@ do {
         case 7:
             $juego5=escribirResumenJugador($coleccionPartidas, "majo");
             echo $juego5;
+        case 8:
+            $juego6=solicitarJugador();
+            echo $juego6;
+            break;
+        case 9:
+            break;
     }
-}while($opcionn!=8);
+}while($opcionn!=9);
 
