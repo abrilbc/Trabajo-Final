@@ -151,9 +151,8 @@ function escribirResumenJugador($arreglo, $nombre)
     $contPar=0;
     $puntajeTotal=0;
     $victorias=0;
-    $jugador=[];
     for($i=0; $i<count($arreglo); $i++){
-        if($arreglo[$i]["jugador"]=$nombre){
+        if($arreglo[$i]["jugador"]==$nombre){
             $contPar+=1;
             $puntajeTotal+=$arreglo[$i]["puntaje"];
             if(($arreglo[$i]["puntaje"])>0){
@@ -162,15 +161,18 @@ function escribirResumenJugador($arreglo, $nombre)
         }
     }
     echo "***************************************************\n";
-    echo "Jugador: ".escribirVerde($nombre);
+    echo "Jugador: ".$nombre;
     echo "\nPartidas: ".$contPar;
     echo "\nPuntaje Total: ".$puntajeTotal;
     echo "\nVictorias: ".$victorias;
     echo "\nPorcentaje Victorias: ".($victorias/$contPar*100);
     echo "\nAdivinadas: \n";
-    for($i=0; $i<=count($arreglo); $i++){
-        if($arreglo[$i]["jugador"]=$nombre)
-        echo "Intento ".$i.": ".$arreglo[$i]["puntaje"]."\n";
+    $cont1=1;
+    for($i=0; $i<count($arreglo); $i++){
+        if($arreglo[$i]["jugador"]==$nombre){
+            echo "            Intento ".$cont1.": ".$arreglo[$i]["puntaje"]."\n";
+            $cont1=$cont1+1;
+        }
     }
     echo "***************************************************\n";
 }
