@@ -78,7 +78,7 @@ $coleccionPartidas[2] = ["palabraWordix "=> "CASTA" , "jugador" => "derecha", "i
 $coleccionPartidas[3] = ["palabraWordix "=> "MERCA" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
 $coleccionPartidas[4] = ["palabraWordix "=> "FIBRA" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 4];
 $coleccionPartidas[5] = ["palabraWordix "=> "LABIO" , "jugador" => "pink2000", "intentos"=> 2, "puntaje" => 5];
-$coleccionPartidas[6] = ["palabraWordix "=> "PLUMA" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
+$coleccionPartidas[6] = ["palabraWordix "=> "PLUMA" , "jugador" => "majo", "intentos"=> 1, "puntaje" => 6];
 $coleccionPartidas[7] = ["palabraWordix "=> "RASTA" , "jugador" => "rudolf", "intentos"=> 1, "puntaje" => 6];
 $coleccionPartidas[8] = ["palabraWordix "=> "SUCIO" , "jugador" => "pink2000", "intentos"=> 1, "puntaje" => 6];
 $coleccionPartidas[9] = ["palabraWordix "=> "NEGRO" , "jugador" => "pink2000", "intentos"=> 6, "puntaje" => 1];
@@ -146,12 +146,32 @@ function escribirNormal($texto)
     echo "\e[0m $texto \e[0m";
 }
 
-function escribirResumenJugador($nombre)
+function escribirResumenJugador($arreglo, $nombre)
 {
+    $contPar=0;
+    $puntajeTotal=0;
+    $victorias=0;
+    $jugador=[];
+    for($i=0; $i<count($arreglo); $i++){
+        if($arreglo[$i]["jugador"]=$nombre){
+            $contPar+=1;
+            $puntajeTotal+=$arreglo[$i]["puntaje"];
+            if(($arreglo[$i]["puntaje"])>0){
+                $victorias+=1;
+            }
+        }
+    }
     echo "***************************************************\n";
-    echo "** Hola ";
-    escribirVerde($nombre);
-    echo " Juguemos una PARTIDA de WORDIX! **\n";
+    echo "Jugador: ".escribirVerde($nombre);
+    echo "\nPartidas: ".$contPar;
+    echo "\nPuntaje Total: ".$puntajeTotal;
+    echo "\nVictorias: ".$victorias;
+    echo "\nPorcentaje Victorias: ".($victorias/$contPar*100);
+    echo "\nAdivinadas: \n";
+    for($i=0; $i<=count($arreglo); $i++){
+        if($arreglo[$i]["jugador"]=$nombre)
+        echo "Intento ".$i.": ".$arreglo[$i]["puntaje"]."\n";
+    }
     echo "***************************************************\n";
 }
 
@@ -220,7 +240,7 @@ do {
                 }
             break;
         case 7:
-            $juego5=escribirResumenJugador("Juan");
+            $juego5=escribirResumenJugador($coleccionPartidas, "majo");
             echo $juego5;
     }
 }while($opcionn!=8);
