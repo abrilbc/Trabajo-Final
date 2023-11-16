@@ -177,28 +177,32 @@ function escribirResumenJugador($arreglo, $nombre)
     echo "***************************************************\n";
 }
 
-function esPalabra($cadena)
+function primerLetra($cadena)
 {
     //int $cantCaracteres, $i, boolean $esLetra
-    $cantCaracteres = strlen($cadena);
     $esLetra = true;
-    $i = 0;
-    while ($esLetra && $i < $cantCaracteres) {
-        $esLetra =  ctype_alpha($cadena[$i]);
-        $i++;
+    $esLetra =  ctype_alpha($cadena[0]);
+    if($esLetra){
+        $resp=true;
+    }else{
+        $resp=false;
     }
-    return $esLetra;
+    return $resp;
 }
 
 function solicitarJugador(){
-    echo "Ingrese el nombre del Jugador: ";
-    $jug=trim(fgets(STDIN));
-    $esCaracter=esPalabra($jug);
-    while(!($esCaracter)) {
-        echo "La palabra ingresado no es string. Ingrese el nombre del Jugador nuevamente: ";
-        $jug=trim(fgets(STDIN));
-        $esCaracter=esPalabra($jug);
-    }
+    $cont=0;
+    do{
+        if($cont==0){
+            echo "Ingrese el nombre del Jugador: ";
+            $jug=trim(fgets(STDIN));
+        }else{
+            echo "La palabra ingresada no es correcta. Ingrese el nombre del Jugador nuevamente: ";
+            $jug=trim(fgets(STDIN));
+        }
+        $esCaracter=primerLetra($jug);
+        $cont+=1;
+    }while(!($esCaracter)); 
 
     return strtolower($jug);
 }
