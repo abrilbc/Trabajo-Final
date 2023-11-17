@@ -176,36 +176,63 @@ function escribirResumenJugador($arreglo, $nombre)
     echo "***************************************************\n";
 }
 
-function palabraElegida() {
-    $cont=0;
-    while($cont==1){
-    
-        $nombres=[];
-        $numero=[];
-        echo "Ingrese su nombre: ";
-        $nombres["nombre"]=trim(fgets(STDIN));
-        echo "Ingrese un número del 1 al 15: ";
-        $numerito=trim(fgets(STDIN));
-        $k=0;
-        $numAux=0;
-        for($i=0; $i<count($numero); $i++){
-            $numero[$k]=$numerito;
-            $numero[0]=$numAux;
-        }
+// 10
 
-        $coleccionPalabra[0] = ["QUESO"];
-        $coleccionPalabra[1] = ["SUCIO"];
-        $coleccionPalabra[2] = ["PASTA"];
-        $coleccionPalabra[3] = ["RENTA"];
-        $coleccionPalabra[4] = ["MERCA"];
-        $coleccionPalabra[5] = ["LABIO"];
-        $coleccionPalabra[6] = ["RASTA"];
-        $coleccionPalabra[7] = ["NEGRO"];
-        $coleccionPalabra[8] = ["TIGRE"];
-        $coleccionPalabra[9] = ["CERDO"];
-        
-        $k++;
-    }    
+function primerLetra($cadena)
+{
+    //int $cantCaracteres, $i, boolean $esLetra
+    $esLetra = true;
+    $esLetra =  ctype_alpha($cadena[0]);
+    if($esLetra){
+        $resp=true;
+    }else{
+        $resp=false;
+    }
+    return $resp;
+}
+
+function solicitarJugador(){
+    $cont=0;
+    do{
+        if($cont==0){
+            echo "Ingrese el nombre del Jugador: ";
+            $jug=trim(fgets(STDIN));
+        }else{
+            echo "La palabra ingresada no es correcta. Ingrese el nombre del Jugador nuevamente: ";
+            $jug=trim(fgets(STDIN));
+        }
+        $esCaracter=primerLetra($jug);
+        $cont+=1;
+    }while(!($esCaracter)); 
+
+    return strtolower($jug);
+}
+
+// 11
+
+function cmp($a, $b) {
+    if ($a == $b) {
+        return 0;
+    }
+    return (($a['jugador'] < $b['jugador'])) ? -1 : 1;
+}
+
+function cmb($a, $b){
+    $valor=0;
+    if($a['jugador'] == $b['jugador']){
+        if($a['palabraWordix '] < $b['palabraWordix ']){
+            $valor=-1;
+        }else{
+            $valor=1;
+        }
+    }
+    return $valor;
+}
+
+function mostrarColeccionOrdenada($arreglo){
+    uasort($arreglo, 'cmp');
+    uasort($arreglo, 'cmb');
+    print_r($arreglo);   
 }
 
 
@@ -243,6 +270,16 @@ do {
         case 7:
             $juego5=escribirResumenJugador($coleccionPartidas, "majo");
             echo $juego5;
+        case 8:
+            $juego6=solicitarJugador();
+            echo $juego6;
+            break;
+        case 9:
+            $juego7=mostrarColeccionOrdenada($coleccionPartidas);
+            echo $juego7;
+            break;
+        case 10:
+            break;
     }
-}while($opcionn!=8);
+}while($opcionn!=10);
 
