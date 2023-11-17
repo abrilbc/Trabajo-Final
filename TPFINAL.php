@@ -103,7 +103,6 @@ function mostrarPrimerPartida($arreglo, $nombre) {
     while (!(($arreglo[$i]["jugador"] == $nombre) && ($arreglo[$i]["puntaje"]>0)) && $i<=(count($arreglo)-1)){
         $i++;
     }
-
     if($i!=(count($arreglo)-1)){
         $posicion=$i;
     }

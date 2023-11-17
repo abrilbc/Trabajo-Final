@@ -25,9 +25,14 @@
 }
 
 /** Función que elige una palabra aleatoria desde una colección de palabras
- * @param array $coleccionPalabras
- * @return string $palabra
+ * @param array $arregloPalabras
+ * @return int $numero
  */
+function palabraAleatoria($palabrasArreglo) {
+    $max = count($palabrasArreglo)-1;
+    $numero = random_int(0, $max);
+    return $numero;
+}
     
 /** Función para almacenar partidas
  * @param string $nombre
@@ -76,39 +81,3 @@ function cargarColeccionPalabras() {
     return $coleccionPalabras;
 }
 
-// PROGRAMA PRINCIPAL //
-$opcionMenu = seleccionarOpcion();
-
-    do {
-        $partida = 0;
-        $jugador = [];
-            if ($opcionMenu > 0 && $opcionMenu <= 8) {    
-                switch ($opcionMenu) {
-                case 1: 
-                    echo "****************";
-                    echo "NOMBRE DEL JUGADOR: ";
-                    $jugador[$partida]["nombre"] = trim(fgets(STDIN));
-                for ($i = 0; $i < count(cargarColeccionPalabras()); $i++) {
-                    $palabra = cargarColeccionPalabras();
-                        echo "[" . $i+1 ."] => " . $palabra[$i] . "\n";
-                }
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4;
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
-                case 7:
-                        echo "Ingrese la palabra de 5 letras a agregar:";
-                        $cargarPalabra = trim(fgets(STDIN));
-                        $arregloPalabras = agregarPalabra(cargarColeccionPalabras(), $cargarPalabra);
-                        print_r($arregloPalabras);
-                        break;
-                }
-            }
-        } while ($opcionMenu != 8);
