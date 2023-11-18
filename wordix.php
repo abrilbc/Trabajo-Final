@@ -148,8 +148,8 @@ function esPalabra($cadena)
     return $esLetra;
 }
 
-/**
- *  ****COMPLETAR*****
+/** Función que lee una cadena de 5 caracteres y determina si es una palabra o no
+ *  @return string $palabra
  */
 function leerPalabra5Letras()
 {
@@ -168,7 +168,7 @@ function leerPalabra5Letras()
 
 /**
  * Inicia una estructura de datos Teclado. La estructura es de tipo: ¿Indexado, asociativo o Multidimensional?
- *@return array
+ * @return array
  */
 function iniciarTeclado()
 {
@@ -327,8 +327,8 @@ function esIntentoGanado($estructuraPalabraIntento)
     return $ganado;
 }
 
-/**
- * ****COMPLETAR***** documentación de la intefaz
+/** Función que determina el puntaje de un jugador
+ * @param 
  */
 function obtenerPuntajeWordix()  /* ****COMPLETAR***** parámetros formales necesarios */
 {

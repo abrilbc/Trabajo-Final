@@ -77,9 +77,9 @@ function cargarPartidas() {
     return $coleccionPartidas;
 }
 
-/**
- * 
- * 
+/** Esta función verifica si existe un jugador ingresado dentro de la colección de partidas
+ * @param string $nombre
+ * @return bool
  */
 function verificarJugador($nombre) {
     $i = 0;
@@ -109,7 +109,7 @@ function cargarColeccionPalabras()
     return ($coleccionPalabras);
 }
 
-/** Función que determina si una
+/** Función que determina si la cadena de caracteres ingresada es una palabra 
  * 
  * 
  */
@@ -326,6 +326,7 @@ function cmb($a, $b){
     }
     return $valor;
 }
+
  /**
   * 
   */
@@ -335,9 +336,10 @@ function mostrarColeccionOrdenada($arreglo){
     print_r($arreglo);   
 }
 
-/**
- * 
- * 
+/** Función que verifica si la palabra ingresada ya existe en el arreglo de Palabras
+ * @param array $arregloPalabras
+ * @param string $palabra
+ * @return bool
  */
 function verificarPalabra($arregloPalabras, $palabra) {
     $band = false;
@@ -348,28 +350,34 @@ function verificarPalabra($arregloPalabras, $palabra) {
     }
     return $band;
 }
+
 /** Función que pide una palabra de 5 letras y la retorna en mayúsculas
  * @return string
  */
 function ingresarPalabra() {
     do {
         echo "Ingrese una palabra de 5 letras: ";
-        $palabra = trim(fgets(STDIN));
+        $palabra = strtoupper(trim(fgets(STDIN)));
         
-        $condicion = verificarPalabra(cargarColeccionPalabras(), strtoupper($palabra));
+        while ((strlen($palabra) != 5) || !esPalabra($palabra)) {
+            escribirRojo("ERROR: La palabra ingresada es inválida.");
+            echo "\nDebe ingresar una palabra de 5 letras:";
+            $palabra = strtoupper(trim(fgets(STDIN)));
+        }
+        $condicion = verificarPalabra(cargarColeccionPalabras(), $palabra);
         if ($condicion == true) {
             escribirRojo("PALABRA EXISTENTE: Ingrese otra palabra");
             echo "\n"; 
         }
     } while ($condicion == true);
 
-    return strtoupper($palabra);
+    return $palabra;
 }
 
 /** Función que agrega una palabra al arreglo previo de la colección
  * @param array $arregloPalabras
  * @param string $palabra
- * @return $
+ * @return array
  */
 function agregarPalabra($arregloPalabras, $palabra){
     $long = count($arregloPalabras);
@@ -385,8 +393,7 @@ $palabrasActuales = cargarColeccionPalabras();
 $partidas = cargarPartidas();
 do {
     $opcion = seleccionarOpcion();
-    
-        if ($opcion <> -1) {
+    if ($opcion <> -1) {
         switch ($opcion) {
             case 1:
                 $jugador = solicitarJugador(); 
@@ -446,14 +453,14 @@ do {
                 escribirVerde("PALABRA AGREGADA EXITOSAMENTE");
                 echo "\n\n¿Desea ver la colección de palabras actuales?(s/n): ";
                 $rta = trim(fgets(STDIN));
-                if ($rta == "s") {
+                if ($rta == "s" || $rta == "S") {
                     print_r($palabrasActuales);
                 }
                 break;
             }
         }
-        else {
-            escribirRojo("OPCION INCORRECTA: Vuelva a seleccionar.");
-            echo "\n\n";
-        }
+    else {
+        escribirRojo("OPCION INCORRECTA: Vuelva a seleccionar.");
+        echo "\n\n";
+    }
 } while ($opcion <> 8);
