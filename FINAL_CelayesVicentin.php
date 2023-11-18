@@ -1,5 +1,6 @@
 <?php
 
+
 /** Función del Menú de Opciones.
  * Pregunta al usuario y devuelve la opción elegida
  * @return int
@@ -45,10 +46,23 @@ function palabraAleatoria($palabrasArreglo) {
 
  $datosPorJugador = []; //Inicializo el arreglo fuera de la función, para almacenar los datos por jugador.
 function cargarPartidas(string $nombre, string $palabra, int $intentos, float $puntaje, int $nroPartida) {
-    if (isset($datosPorJugador[$nombre])) { //verifica si el jugador tiene partidas registradas
-        $datosPorJugador[$nombre] = [];
-    }
+    
+    $coleccionPartidas[0] = ["palabraWordix "=> "QUESO" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
+    $coleccionPartidas[1] = ["palabraWordix "=> "CASAS" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 14];
+    $coleccionPartidas[2] = ["palabraWordix "=> "CASTA" , "jugador" => "derecha", "intentos"=> 4, "    puntaje" => 10];
+    $coleccionPartidas[3] = ["palabraWordix "=> "MERCA" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 1];
+    $coleccionPartidas[4] = ["palabraWordix "=> "FIBRA" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 5];
+    $coleccionPartidas[5] = ["palabraWordix "=> "LABIO" , "jugador" => "pink2000", "intentos"=> 2, "    puntaje" => 7];
+    $coleccionPartidas[6] = ["palabraWordix "=> "PLUMA" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 2];
+    $coleccionPartidas[7] = ["palabraWordix "=> "RASTA" , "jugador" => "rudolf", "intentos"=> 1, "puntaje" => 3];
+    $coleccionPartidas[8] = ["palabraWordix "=> "SUCIO" , "jugador" => "pink2000", "intentos"=> 1, "    puntaje" => 10];
+    $coleccionPartidas[9] = ["palabraWordix "=> "NEGRO" , "jugador" => "pink2000", "intentos"=> 6, "    puntaje" => 0];
 
+    if (isset($coleccionPartidas)) { //verifica si el jugador tiene partidas registradas
+        $coleccionPartidas[$nombre] = [];
+    }
+    
+    
     $partidaActual = [      //Arreglo asociativo general para la partida actual
         "jugador" => $nombre,
         "palabra" => $palabra,
