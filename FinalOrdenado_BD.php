@@ -380,6 +380,7 @@ function agregarPalabra($arregloPalabras, $palabra){
 
 // PROGRAMA PRINCIPAL
 /* MENÚ DE OPCIONES PARA INTERACTUAR */
+
 $palabrasActuales = cargarColeccionPalabras();
 $partidas = cargarPartidas();
 do {
