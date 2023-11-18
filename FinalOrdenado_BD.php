@@ -64,16 +64,16 @@ function escribirRojo($texto)
  * 
  */
 function cargarPartidas() {
-    $coleccionPartidas[0] = ["palabraWordix "=> "QUESO" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
-    $coleccionPartidas[1] = ["palabraWordix "=> "CASAS" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 4];
-    $coleccionPartidas[2] = ["palabraWordix "=> "TINTO" , "jugador" => "derecha", "intentos"=> 4, "puntaje" => 3];
-    $coleccionPartidas[3] = ["palabraWordix "=> "GOTAS" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
-    $coleccionPartidas[4] = ["palabraWordix "=> "FIBRA" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 4];
-    $coleccionPartidas[5] = ["palabraWordix "=> "VERDE" , "jugador" => "pink2000", "intentos"=> 2, "puntaje" => 5];
-    $coleccionPartidas[6] = ["palabraWordix "=> "NAVES" , "jugador" => "majo", "intentos"=> 1, "puntaje" => 6];
-    $coleccionPartidas[7] = ["palabraWordix "=> "TINTO" , "jugador" => "rudolf", "intentos"=> 1, "puntaje" => 6];
-    $coleccionPartidas[8] = ["palabraWordix "=> "PISOS" , "jugador" => "pink2000", "intentos"=> 1, "puntaje" => 6];
-    $coleccionPartidas[9] = ["palabraWordix "=> "GATOS" , "jugador" => "pink2000", "intentos"=> 6, "puntaje" => 1];
+    $coleccionPartidas[0] = ["palabraWordix"=> "QUESO" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
+    $coleccionPartidas[1] = ["palabraWordix"=> "CASAS" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 4];
+    $coleccionPartidas[2] = ["palabraWordix"=> "TINTO" , "jugador" => "derecha", "intentos"=> 4, "puntaje" => 3];
+    $coleccionPartidas[3] = ["palabraWordix"=> "GOTAS" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
+    $coleccionPartidas[4] = ["palabraWordix"=> "FIBRA" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 4];
+    $coleccionPartidas[5] = ["palabraWordix"=> "VERDE" , "jugador" => "pink2000", "intentos"=> 2, "puntaje" => 5];
+    $coleccionPartidas[6] = ["palabraWordix"=> "NAVES" , "jugador" => "majo", "intentos"=> 1, "puntaje" => 6];
+    $coleccionPartidas[7] = ["palabraWordix"=> "TINTO" , "jugador" => "rudolf", "intentos"=> 1, "puntaje" => 6];
+    $coleccionPartidas[8] = ["palabraWordix"=> "PISOS" , "jugador" => "pink2000", "intentos"=> 1, "puntaje" => 6];
+    $coleccionPartidas[9] = ["palabraWordix"=> "GATOS" , "jugador" => "pink2000", "intentos"=> 6, "puntaje" => 1];
     return $coleccionPartidas;
 }
 
@@ -92,6 +92,8 @@ function verificarJugador($nombre) {
     }
     return $band;
 }
+
+
 /** Función de la colección de palabras
  * @return array
  */
@@ -105,6 +107,23 @@ function cargarColeccionPalabras()
     ];
 
     return ($coleccionPalabras);
+}
+
+/** Función que determina si una
+ * 
+ * 
+ */
+function esPalabra($cadena)
+{
+    //int $cantCaracteres, $i, boolean $esLetra
+    $cantCaracteres = strlen($cadena);
+    $esLetra = true;
+    $i = 0;
+    while ($esLetra && $i < $cantCaracteres) {
+        $esLetra =  ctype_alpha($cadena[$i]);
+        $i++;
+    }
+    return $esLetra;
 }
 
 /** Función que determina si el primer caracter de el nombre de un jugador es letra o no
@@ -239,7 +258,6 @@ function mostrarPrimerPartida($arregloPartidas, $nombre) {
 /** Función que muestra las estadisticas de un jugador ingresado
  * @param array $arregloPartidas
  * @param string $nombre
- * 
  */
 function escribirResumenJugador($arregloPartidas, $nombre)
 {
@@ -273,18 +291,100 @@ function escribirResumenJugador($arregloPartidas, $nombre)
         } 
         
     }echo "***************************************************\n";
-   
-
 }
-    
+
+/**
+ * 
+ * 
+ */
+function cmp($a, $b) {
+    $valor = 1;
+    if ($a == $b) {
+        $valor = 0;
+    }
+    elseif ($a["jugador"] < $b["jugador"]) { 
+        $valor = -1;
+    }
+    else {
+        $valor = 1;
+    }
+    return $valor;
+}
+
+/** 
+ * 
+ * 
+ */
+function cmb($a, $b){
+    $valor = 0;
+    if($a["jugador"] == $b["jugador"]){
+        if($a["palabraWordix"] < $b["palabraWordix"]){
+            $valor = -1;
+        }else{
+            $valor = 1;
+        }
+    }
+    return $valor;
+}
+ /**
+  * 
+  */
+function mostrarColeccionOrdenada($arreglo){
+    uasort($arreglo, 'cmp');
+    uasort($arreglo, 'cmb');
+    print_r($arreglo);   
+}
+
+/**
+ * 
+ * 
+ */
+function verificarPalabra($arregloPalabras, $palabra) {
+    $band = false;
+    for ($i = 0 ; $i < count($arregloPalabras) ; $i++) {
+        if ($arregloPalabras[$i] == $palabra) {
+            $band = true;
+        }
+    }
+    return $band;
+}
+/** Función que pide una palabra de 5 letras y la retorna en mayúsculas
+ * @return string
+ */
+function ingresarPalabra() {
+    do {
+        echo "Ingrese una palabra de 5 letras: ";
+        $palabra = trim(fgets(STDIN));
+        
+        $condicion = verificarPalabra(cargarColeccionPalabras(), strtoupper($palabra));
+        if ($condicion == true) {
+            escribirRojo("PALABRA EXISTENTE: Ingrese otra palabra");
+            echo "\n"; 
+        }
+    } while ($condicion == true);
+
+    return strtoupper($palabra);
+}
+
+/** Función que agrega una palabra al arreglo previo de la colección
+ * @param array $arregloPalabras
+ * @param string $palabra
+ * @return $
+ */
+function agregarPalabra($arregloPalabras, $palabra){
+    $long = count($arregloPalabras);
+    $arregloPalabras[$long] = $palabra;
+    return $arregloPalabras;
+}
+
 
 // PROGRAMA PRINCIPAL
-
-
+/* MENÚ DE OPCIONES PARA INTERACTUAR */
+$palabrasActuales = cargarColeccionPalabras();
+$partidas = cargarPartidas();
 do {
     $opcion = seleccionarOpcion();
-    $partidas = cargarPartidas();
-    $palabras = cargarColeccionPalabras();
+    
         if ($opcion <> -1) {
         switch ($opcion) {
             case 1:
@@ -336,13 +436,21 @@ do {
                 } while (verificarJugador($jugador) == false);
                 break;
             case 6:
-                echo "Opción 6\n";
+                mostrarColeccionOrdenada($partidas);
                 break;
             case 7:
-                echo "Opción 7\n";
+                $palab = ingresarPalabra();
+                echo "Palabra a agregar: " . $palab . "\n\n";
+                $palabrasActuales = agregarPalabra($palabrasActuales, $palab);
+                escribirVerde("PALABRA AGREGADA EXITOSAMENTE");
+                echo "\n\n¿Desea ver la colección de palabras actuales?(s/n): ";
+                $rta = trim(fgets(STDIN));
+                if ($rta == "s") {
+                    print_r($palabrasActuales);
+                }
                 break;
+            }
         }
-    }
         else {
             escribirRojo("OPCION INCORRECTA: Vuelva a seleccionar.");
             echo "\n\n";

@@ -218,7 +218,7 @@ function cmp($a, $b) {
 }
 
 function cmb($a, $b){
-    $valor=0;
+    $valor = 0;
     if($a['jugador'] == $b['jugador']){
         if($a['palabraWordix '] < $b['palabraWordix ']){
             $valor=-1;
