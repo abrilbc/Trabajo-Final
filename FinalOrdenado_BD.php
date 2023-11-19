@@ -1,39 +1,5 @@
 <?php
-
-/**
- * Escrbir un texto en color AMARILLO
- * @param string $texto)
- */
-function escribirAmarillo($texto)
-{
-    echo "\e[1;37;43m $texto \e[0m";
-}
-
-/**
- * Escrbir un texto en color GRIS
- * @param string $texto
- */
-function escribirGris($texto)
-{
-    echo "\e[1;34;47m $texto \e[0m";
-}
-/**
- * Escrbir un texto en color VERDE
- * @param string $texto)
- */
-function escribirVerde($texto)
-{
-    echo "\e[1;37;42m $texto \e[0m";
-}
-
-/**
- * Escrbir un texto en color ROJO
- * @param string $texto
- */
-function escribirRojo($texto)
-{
-    echo "\e[1;37;41m $texto \e[0m";
-}
+include_once("wordix.php");
 
 /** Función del Menú de Opciones.
  * Pregunta al usuario y devuelve la opción elegida
@@ -109,22 +75,6 @@ function cargarColeccionPalabras()
     return ($coleccionPalabras);
 }
 
-/** Función que determina si la cadena de caracteres ingresada es una palabra 
- * 
- * 
- */
-function esPalabra($cadena)
-{
-    //int $cantCaracteres, $i, boolean $esLetra
-    $cantCaracteres = strlen($cadena);
-    $esLetra = true;
-    $i = 0;
-    while ($esLetra && $i < $cantCaracteres) {
-        $esLetra =  ctype_alpha($cadena[$i]);
-        $i++;
-    }
-    return $esLetra;
-}
 
 /** Función que determina si el primer caracter de el nombre de un jugador es letra o no
  * @param string $cadena
@@ -398,7 +348,7 @@ do {
             case 1:
                 $jugador = solicitarJugador(); 
                 $palabraSelec = palabraSeleccionada($jugador);
-                echo $palabraSelec . "\n\n";
+                jugarWordix($palabraSelec, $jugador);
                 break;
             case 2:
                 $jugador = solicitarJugador();
