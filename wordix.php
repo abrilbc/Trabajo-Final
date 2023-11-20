@@ -1,5 +1,5 @@
 <?php
-
+include_once ("finalOrdenado.php");
 /*
 La librería JugarWordix posee la definición de constantes y funciones necesarias
 para jugar al Wordix.
@@ -330,12 +330,6 @@ function esIntentoGanado($estructuraPalabraIntento)
 /** Función que determina el puntaje de un jugador
  * @param 
  */
-function obtenerPuntajeWordix()  /* ****COMPLETAR***** parámetros formales necesarios */
-{
-
-    /* ****COMPLETAR***** cuerpo de la función*/
-    return 0;
-}
 
 /**
  * Dada una palabra para adivinar, juega una partida de wordix intentando que el usuario adivine la palabra.
@@ -369,14 +363,14 @@ function jugarWordix($palabraWordix, $nombreUsuario)
 
     if ($ganoElIntento) {
         $nroIntento--;
-        $puntaje = obtenerPuntajeWordix();
-        echo "Adivinó la palabra Wordix en el intento " . $nroIntento . "!: " . $palabraIntento . " Obtuvo $puntaje puntos!";
+        $puntaje = obtenerPuntajeWordix($nroIntento, $palabraWordix);
+        echo "Adivinó la palabra Wordix en el intento " . $nroIntento . "!: " . $palabraIntento . " \nObtuvo $puntaje puntos!\n";
     } else {
         $nroIntento = 0; //reset intento
         $puntaje = 0;
-        echo "Seguí Jugando Wordix, la próxima será! ";
+        echo "Seguí Jugando Wordix, la próxima será! " . $nroIntento;
     }
-
+    
     $partida = [
         "palabraWordix" => $palabraWordix,
         "jugador" => $nombreUsuario,

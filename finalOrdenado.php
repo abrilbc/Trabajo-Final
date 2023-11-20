@@ -30,6 +30,7 @@ include_once("wordix.php");
  * 
  */
 function cargarPartidas() {
+    $coleccionPartidas = [];
     $coleccionPartidas[0] = ["palabraWordix"=> "QUESO" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
     $coleccionPartidas[1] = ["palabraWordix"=> "CASAS" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 4];
     $coleccionPartidas[2] = ["palabraWordix"=> "TINTO" , "jugador" => "derecha", "intentos"=> 4, "puntaje" => 3];
@@ -47,10 +48,9 @@ function cargarPartidas() {
  * @param string $nombre
  * @return bool
  */
-function verificarJugador($nombre) {
+function verificarJugador($nombre, $arregloPartidas) {
     $i = 0;
     $band = false;
-    $arregloPartidas = cargarPartidas();
     for ($i = 0 ; $i < count($arregloPartidas) ; $i++) {
         if ($arregloPartidas[$i]["jugador"] == $nombre) {
             $band = true;
@@ -176,10 +176,10 @@ function palabraAleatoria($nombre) {
 /** Función que muestra una partida basada en el número ingresado
  * @return array
  */
-function mostrarPartida(){
+function mostrarPartida($coleccionDePartidas){
     echo "MOSTRAR PARTIDA: \n";
-    $numMostrar = solicitarNumeroEntre(1, count(cargarPartidas()));
-    $partidaPrint = cargarPartidas()[$numMostrar-1];
+    $numMostrar = solicitarNumeroEntre(1, count($coleccionDePartidas));
+    $partidaPrint = $coleccionDePartidas[$numMostrar-1];
     return $partidaPrint;
 }
 
@@ -335,10 +335,66 @@ function agregarPalabra($arregloPalabras, $palabra){
     return $arregloPalabras;
 }
 
+/** Función que calcula el puntaje del jugador
+ * @param int $intentos
+ * @param string $palabra
+ * @return int $puntajeTotal
+ */
+function obtenerPuntajeWordix($intentos, $palabra) {
+    //Puntaje basado en los intentos
+    $intentosMaximos = 6;
+    $puntajeBase = 0;
+    if ($intentos != 0) {
+        while ($intentos <= $intentosMaximos) {
+            $puntajeBase++;
+            $intentosMaximos--;
+        }
+        $puntajeIntentos = $puntajeBase;
+        echo "PUNTAJE: " . $puntajeIntentos . "\n\n";
+    //Puntaje basado en la palabra (vocales, consonantes antes y despúes de "M")
+        $cantLetras = strlen($palabra);
+        $cantVocales = 0;
+        $consAntesM = 0;
+        $consPostM = 0;
+        for($i = 0 ; $i < $cantLetras ; $i++) {
+            $letra = $palabra[$i];
+            //condición para las vocales (1 punto)
+            if (in_array($letra, ["A", "E", "I", "O", "U"])) {
+                $cantVocales++;
+            }
+            //condición para las consonantes anteriores a M (inclusive)(2 puntos)
+            if(in_array($letra, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"])) {
+                $consAntesM++;
+            }
+            //condición para las consonantes posteriores a M (3 puntos);
+            if(in_array($letra, ["N", "Ñ", "O", "P", "Q", "R", "S", "T","U", "V", "W", "X", "Y", "Z"])) {
+                $consPostM++;
+            }
+        }
+        echo "Cantidad Vocales: " . $cantVocales . "\n";
+        echo "Cantidad Antes de M: " . $consAntesM . "\n";
+        echo "Cantidad Post a M: " . $consPostM . "\n";    
+        $puntAntesM = $consAntesM * 2;
+        $puntPostM = $consPostM * 3;
+        $puntajeFinal = $puntajeIntentos + $puntAntesM + $puntPostM + $cantVocales; 
+    }
+    return $puntajeFinal;
+}
+
+/** Agregar partida a la colección de partidas
+ * @param array $partidaActual
+ * @param array $coleccionPartidas
+ * @param array 
+ */
+function agregarPartida($partidaActual, $coleccionDePartida) {
+    $cantPartidas = count($coleccionDePartida);
+    $coleccionDePartida[$cantPartidas] = $partidaActual;
+    return $coleccionDePartida;
+}
 
 // PROGRAMA PRINCIPAL
 /* MENÚ DE OPCIONES PARA INTERACTUAR */
-
+echo "\nPUNTOS: ". $puntaje . "\n\n";
 $palabrasActuales = cargarColeccionPalabras();
 $partidas = cargarPartidas();
 do {
@@ -348,20 +404,23 @@ do {
             case 1:
                 $jugador = solicitarJugador(); 
                 $palabraSelec = palabraSeleccionada($jugador);
-                jugarWordix($palabraSelec, $jugador);
+                $partida = jugarWordix($palabraSelec, $jugador);
+                $partidas = agregarPartida($partida, $partidas);
+                echo print_r($partidas);
                 break;
             case 2:
                 $jugador = solicitarJugador();
                 $palabraAleat = palabraAleatoria($jugador);
-                echo $palabraAleat . "\n\n";
-                break;
+                $partida = jugarWordix($palabraAleat, $jugador);
+                $partidas = agregarPartida($partida, $partidas);
+                echo print_r($partidas);
             case 3:
-                print_r(mostrarPartida());
+                print_r(mostrarPartida($partidas));
                 break;
             case 4:
                 do {
                     $jugador = solicitarJugador();
-                    if (verificarJugador($jugador) == true) {
+                    if (verificarJugador($jugador, $partidas) == true) {
                         $indicePartida = mostrarPrimerPartida($partidas, $jugador);
                         if($indicePartida == -1){
                             escribirRojo("Este jugador no ganó ninguna partida.");
@@ -379,19 +438,19 @@ do {
                         escribirRojo("Nombre inválido: El jugador no ha sido encontrado en el sistema.");
                         echo "\n";
                     }
-                } while (verificarJugador($jugador) == false);
+                } while (verificarJugador($jugador, $partidas) == false);
                 break;
             case 5:
                 do {
                     $jugador = solicitarJugador();
-                    if (verificarJugador($jugador) == true) {
+                    if (verificarJugador($jugador, $partidas) == true) {
                         escribirResumenJugador($partidas, $jugador);
                     }
                     else {
                         escribirRojo("Nombre inválido: El jugador no ha sido encontrado en el sistema.");
                         echo "\n";
                     }
-                } while (verificarJugador($jugador) == false);
+                } while (verificarJugador($jugador, $partidas) == false);
                 break;
             case 6:
                 mostrarColeccionOrdenada($partidas);
