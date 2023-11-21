@@ -394,7 +394,6 @@ function agregarPartida($partidaActual, $coleccionDePartida) {
 
 // PROGRAMA PRINCIPAL
 /* MENÚ DE OPCIONES PARA INTERACTUAR */
-echo "\nPUNTOS: ". $puntaje . "\n\n";
 $palabrasActuales = cargarColeccionPalabras();
 $partidas = cargarPartidas();
 do {
