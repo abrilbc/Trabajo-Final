@@ -371,9 +371,9 @@ function obtenerPuntajeWordix($intentos, $palabra) {
                 $consPostM++;
             }
         }
-        echo "Cantidad Vocales: " . $cantVocales . "\n";
-        echo "Cantidad Antes de M: " . $consAntesM . "\n";
-        echo "Cantidad Post a M: " . $consPostM . "\n";    
+        echo "Cantidad Vocales: " . $cantVocales . "\n";        //Borrar
+        echo "Cantidad Antes de M: " . $consAntesM . "\n";      //Borrar
+        echo "Cantidad Post a M: " . $consPostM . "\n";         //Borrar
         $puntAntesM = $consAntesM * 2;
         $puntPostM = $consPostM * 3;
         $puntajeFinal = $puntajeIntentos + $puntAntesM + $puntPostM + $cantVocales; 
