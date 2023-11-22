@@ -359,7 +359,7 @@ function ordenarPorPalabra($a, $b){
   */
 function mostrarColeccionOrdenada($arreglo){
     uasort($arreglo, 'ordenarPorNombre');
-    uasort($arreglo, 'cmb');
+    uasort($arreglo, 'ordenarPorPalabra');
     print_r($arreglo);   
 }
 
