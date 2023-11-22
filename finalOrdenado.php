@@ -322,7 +322,7 @@ function escribirResumenJugador($arregloPartidas, $nombre)
  */
 function cmp($a, $b) {
     $valor = 1;
-    if ($a == $b) {
+    if ($a["jugador"] == $b["jugador"]) {
         $valor = 0;
     }
     elseif ($a["jugador"] < $b["jugador"]) { 
