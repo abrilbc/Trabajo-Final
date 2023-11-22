@@ -337,9 +337,10 @@ function ordenarPorNombre($a, $b) {
     return $valor;
 }
 
-/** 
- * 
- * 
+/** Función que ordena a los jugadores alfabéticamente por nombre 1ero y luego los ordena alfabéticamente por palabra
+ * @param array $a
+ * @param array $b
+ * @return int 
  */
 function ordenarPorPalabra($a, $b){
     $valor = 0;
@@ -357,7 +358,7 @@ function ordenarPorPalabra($a, $b){
   * 
   */
 function mostrarColeccionOrdenada($arreglo){
-    uasort($arreglo, 'cmp');
+    uasort($arreglo, 'ordenarPorNombre');
     uasort($arreglo, 'cmb');
     print_r($arreglo);   
 }
