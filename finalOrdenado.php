@@ -316,13 +316,16 @@ function escribirResumenJugador($arregloPartidas, $nombre)
      return $arregloResumen;  
 }
 
-/**
- * 
- * 
+/** Función que ordena a los jugadores alfabéticamente
+ * @param array $a
+ * @param array $b
+ * @return int 
  */
-function cmp($a, $b) {
+function ordenarPorNombre($a, $b) {
+    // Esta función ordena un arreglo alfabeticamente poniendo como prioridad el jugador
+    // int $valor 
     $valor = 1;
-    if ($a == $b) {
+    if ($a["jugador"] == $b["jugador"]) {
         $valor = 0;
     }
     elseif ($a["jugador"] < $b["jugador"]) { 
@@ -338,7 +341,7 @@ function cmp($a, $b) {
  * 
  * 
  */
-function cmb($a, $b){
+function ordenarPorPalabra($a, $b){
     $valor = 0;
     if($a["jugador"] == $b["jugador"]){
         if($a["palabraWordix"] < $b["palabraWordix"]){
