@@ -436,11 +436,11 @@ function obtenerPuntajeWordix($intentos, $palabra) {
                 $cantVocales++;
             }
             //condición para las consonantes anteriores a M (inclusive)(2 puntos)
-            if(in_array($letra, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"])) {
+            if(in_array($letra, ["B", "C", "D", "F", "G", "H","J", "K", "L", "M"])) {
                 $consAntesM++;
             }
             //condición para las consonantes posteriores a M (3 puntos);
-            if(in_array($letra, ["N", "Ñ", "O", "P", "Q", "R", "S", "T","U", "V", "W", "X", "Y", "Z"])) {
+            if(in_array($letra, ["N", "Ñ", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"])) {
                 $consPostM++;
             }
         }
