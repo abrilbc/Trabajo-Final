@@ -7,7 +7,7 @@ include_once("wordix.php");
  */
 
  function seleccionarOpcion() {
-    echo "MENÚ DE OPCIONES: ¡WORDIX! \n";
+    echo "\nMENÚ DE OPCIONES: ¡WORDIX! \n";
     echo "1. Jugar al WORDIX con una palabra elegida. \n";
     echo "2. Jugar al WORDIX con una palabra aleatoria. \n";
     echo "3. Mostrar una Partida. \n";
@@ -37,13 +37,50 @@ function cargarPartidas() {
     $coleccionPartidas[3] = ["palabraWordix"=> "GOTAS" , "jugador" => "majo", "intentos"=> 0, "puntaje" => 0];
     $coleccionPartidas[4] = ["palabraWordix"=> "FIBRA" , "jugador" => "rudolf", "intentos"=> 3, "puntaje" => 4];
     $coleccionPartidas[5] = ["palabraWordix"=> "VERDE" , "jugador" => "pink2000", "intentos"=> 2, "puntaje" => 5];
-    $coleccionPartidas[6] = ["palabraWordix"=> "NAVES" , "jugador" => "majo", "intentos"=> 1, "puntaje" => 6];
-    $coleccionPartidas[7] = ["palabraWordix"=> "TINTO" , "jugador" => "rudolf", "intentos"=> 1, "puntaje" => 6];
+    $coleccionPartidas[6] = ["palabraWordix"=> "NAVES" , "jugador" => "majo", "intentos"=> 1, "puntaje" => 6];    $coleccionPartidas[7] = ["palabraWordix"=> "TINTO" , "jugador" => "rudolf", "intentos"=> 1, "puntaje" => 6];
     $coleccionPartidas[8] = ["palabraWordix"=> "PISOS" , "jugador" => "pink2000", "intentos"=> 1, "puntaje" => 6];
     $coleccionPartidas[9] = ["palabraWordix"=> "GATOS" , "jugador" => "pink2000", "intentos"=> 6, "puntaje" => 1];
     return $coleccionPartidas;
 }
 
+/** Función que almacena en un contador cuantas veces un jugador ganó en ciertos intentos
+ * @param array $arregloPartidas
+ * @param string $nombre
+ * @return array
+ */
+function intentosContador($arregloPartidas, $nombre) {
+    $intento1 = 0;
+    $intento2 = 0;
+    $intento3 = 0;
+    $intento4 = 0;
+    $intento5 = 0;
+    $intento6 = 0;
+    $arregloIntentos = [];
+    for ($i = 0 ; $i < count($arregloPartidas) ; $i++) {
+        if ($arregloPartidas[$i]["jugador"] == $nombre) {
+            if ($arregloPartidas[$i]["intentos"] == 1) {
+                $intento1++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 2) {
+                $intento2++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 3) {
+                $intento3++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 4) {
+                $intento4++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 5) {
+                $intento5++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 6) {
+                $intento6++;
+            }
+        }
+    }
+    $arregloIntentos = [$intento1, $intento2, $intento3, $intento4, $intento5, $intento6];
+    return $arregloIntentos;
+}
 /** Esta función verifica si existe un jugador ingresado dentro de la colección de partidas
  * @param string $nombre
  * @return bool
@@ -140,17 +177,18 @@ function solicitarNumeroEntre($min, $max)
  * @param string $nombre
  * @return string $palabraSeleccionada
  */
-function palabraSeleccionada($nombre) {
-    $numero = solicitarNumeroEntre(1, count(cargarColeccionPalabras()));
+function palabraSeleccionada($nombre, $arregloPalabras) {
+    
+    $numero = solicitarNumeroEntre(1, count($arregloPalabras));
     for ($i = 0; $i < count(cargarPartidas()); $i++) {
-        while (cargarPartidas()[$i]["jugador"] == $nombre && cargarPartidas()[$i]["palabraWordix"] == cargarColeccionPalabras()[$numero-1]) {
+        while (cargarPartidas()[$i]["jugador"] == $nombre && cargarPartidas()[$i]["palabraWordix"] == $arregloPalabras[$numero-1]) {
             escribirRojo("La palabra seleccionada ya ha sido jugada.");
             echo "\n";
             echo "Elija otro número: ";
             $numero = trim(fgets(STDIN));
         }
     }
-        $palabraSeleccionada = cargarColeccionPalabras()[$numero-1];
+        $palabraSeleccionada = $arregloPalabras[$numero-1];
     return $palabraSeleccionada;
 }
 
@@ -158,18 +196,18 @@ function palabraSeleccionada($nombre) {
  * @param string $nombre
  * @return string $palabraAleat
  */
-function palabraAleatoria($nombre) {
+function palabraAleatoria($nombre, $arregloPalabras) {
     $min = 0;
-    $max = count(cargarColeccionPalabras()) - 1;
+    $max = count($arregloPalabras) - 1;
     $numAleatorio = random_int($min, $max);
-    $palabraAl = cargarColeccionPalabras()[$numAleatorio];
+    $palabraAl = $arregloPalabras[$numAleatorio];
     for ($i = 0 ; $i < count(cargarPartidas()) ; $i++) {
-        while (cargarPartidas()[$i]["jugador"] == $nombre && cargarPartidas()[$i]["palabraWordix"] == cargarColeccionPalabras()[$numAleatorio]){
+        while (cargarPartidas()[$i]["jugador"] == $nombre && cargarPartidas()[$i]["palabraWordix"] == $arregloPalabras[$numAleatorio]){
             echo $palabraAl . " ya ha sido jugada\n";
             $numAleatorio = random_int($min, $max);
         }
     }
-    $palabraAl = cargarColeccionPalabras()[$numAleatorio];
+    $palabraAl = $arregloPalabras[$numAleatorio];
     return $palabraAl;
 }
 
@@ -211,36 +249,52 @@ function mostrarPrimerPartida($arregloPartidas, $nombre) {
  */
 function escribirResumenJugador($arregloPartidas, $nombre)
 {
-    $contadorPartidas = 0;
-    $puntajeTotal = 0;
-    $victorias = 0;
-    for($i = 0; $i < count($arregloPartidas) ; $i++) {
+    $intento1 = 0;
+    $intento2 = 0;
+    $intento3 = 0;
+    $intento4 = 0;
+    $intento5 = 0;
+    $intento6 = 0;
+    $arregloIntentos = [];
+    for ($i = 0 ; $i < count($arregloPartidas) ; $i++) {
         if ($arregloPartidas[$i]["jugador"] == $nombre) {
-            $contadorPartidas += 1;
-            $puntajeTotal += $arregloPartidas[$i]["puntaje"];
-            
-            if (($arregloPartidas[$i]["puntaje"]) > 0) {
-                $victorias += 1;
+            if ($arregloPartidas[$i]["intentos"] == 1) {
+                $intento1++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 2) {
+                $intento2++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 3) {
+                $intento3++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 4) {
+                $intento4++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 5) {
+                $intento5++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 6) {
+                $intento6++;
             }
         }
-
     }
-    echo "***************************************************\n";
-    echo "Jugador: " . $nombre;
-    echo "\nPartidas: " . $contadorPartidas;
-    echo "\nPuntaje Total: " . $puntajeTotal;
-    echo "\nVictorias: " . $victorias;
-    echo "\nPorcentaje Victorias: " . ($victorias/$contadorPartidas*100) . "%";
-    echo "\nAdivinadas: \n";
-
-    $cont1 = 1;
-    for($i = 0; $i < count($arregloPartidas) ; $i++) {
-        if($arregloPartidas[$i]["jugador"] == $nombre) {
-            echo "            Intento " . $cont1 . ": " . $arregloPartidas[$i]["puntaje"] . "\n";
-            $cont1 = $cont1 + 1;
-        } 
-        
-    }echo "***************************************************\n";
+    $arregloIntentos = [$intento1, $intento2, $intento3, $intento4, $intento5, $intento6];
+ 
+     $arregloResumen=[];
+     for($i = 0; $i < count($arregloPartidas) ; $i++) {
+         if ($arregloPartidas[$i]["jugador"] == $nombre) {
+             $arregloResumen["Jugador"] == $nombre;
+             $arregloResumen["Partidas"] += 1;
+             $arregloResumen["Puntaje Total"] += $arregloPartidas[$i]["puntaje"];
+             if (($arregloPartidas[$i]["puntaje"]) > 0) {
+                 $arregloResumen["victorias"] += 1;
+             }
+         }
+     }
+     
+     $arregloResumen["Porcentaje Victorias"] == ($arregloResumen["victorias"]/$arregloResumen["Partidas"])*100;
+     $arregloResumen["ADIVINADAS"] = $arregloIntentos;
+     return $arregloResumen;  
 }
 
 /**
@@ -392,27 +446,32 @@ function agregarPartida($partidaActual, $coleccionDePartida) {
     return $coleccionDePartida;
 }
 
+
 // PROGRAMA PRINCIPAL
 /* MENÚ DE OPCIONES PARA INTERACTUAR */
 $palabrasActuales = cargarColeccionPalabras();
 $partidas = cargarPartidas();
+$intentosArray = intentosContador($partidas, "pink2000");
+echo "\n" .count($intentosArray). "\n";
+for ($i = 0 ; $i < count($intentosArray) ; $i++) {
+echo "\nIntento " . $i+1 .": " . $intentosArray[$i]. "\n";
+}
 do {
     $opcion = seleccionarOpcion();
     if ($opcion <> -1) {
         switch ($opcion) {
             case 1:
                 $jugador = solicitarJugador(); 
-                $palabraSelec = palabraSeleccionada($jugador);
+                $palabraSelec = palabraSeleccionada($jugador, $palabrasActuales);
                 $partida = jugarWordix($palabraSelec, $jugador);
                 $partidas = agregarPartida($partida, $partidas);
-                echo print_r($partidas);
                 break;
             case 2:
                 $jugador = solicitarJugador();
-                $palabraAleat = palabraAleatoria($jugador);
+                $palabraAleat = palabraAleatoria($jugador, $palabrasActuales);
                 $partida = jugarWordix($palabraAleat, $jugador);
                 $partidas = agregarPartida($partida, $partidas);
-                echo print_r($partidas);
+                break;
             case 3:
                 print_r(mostrarPartida($partidas));
                 break;

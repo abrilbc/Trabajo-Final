@@ -95,3 +95,38 @@ function cargarColeccionPalabras() {
     return $coleccionPalabras;
 }
 
+/** Función que almacena en un contador cuantas veces un jugador ganó en ciertos intentos
+ * @param array $arregloPartidas
+ * @param string $nombre
+ * @return array
+ */
+function intentosContador($arregloPartidas, $nombre) {
+    $intento1 = 0;
+    $intento2 = 0;
+    $intento3 = 0;
+    $intento4 = 0;
+    $intento5 = 0;
+    $intento6 = 0;
+    $arregloIntentos = [];
+    for ($i = 0 ; $i < count($arregloPartidas) ; $i++) {
+        if ($arregloPartidas[$i]["jugador"] == $nombre) {
+            if ($arregloPartidas[$i]["intentos"] == 1) {
+                $intento1++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 2) {
+                $intento2++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 3) {
+                $intento3++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 4) {
+                $intento4++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 5) {
+                $intento5++;
+            }
+            elseif ($arregloPartidas[$i]["intentos"] == 6) {
+                $intento6++;
+            }
+        }
+    }}
