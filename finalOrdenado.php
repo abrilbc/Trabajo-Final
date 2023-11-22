@@ -43,6 +43,17 @@ function cargarPartidas() {
     return $coleccionPartidas;
 }
 
+/** Agregar partida a la colección de partidas
+ * @param array $partidaActual
+ * @param array $coleccionPartidas
+ * @param array 
+ */
+function agregarPartida($partidaActual, $coleccionDePartida) {
+    $cantPartidas = count($coleccionDePartida);
+    $coleccionDePartida[$cantPartidas] = $partidaActual;
+    return $coleccionDePartida;
+}
+
 /** Función que almacena en un contador cuantas veces un jugador ganó en ciertos intentos
  * @param array $arregloPartidas
  * @param string $nombre
@@ -175,21 +186,21 @@ function solicitarNumeroEntre($min, $max)
 
 /** Función que retorna una palabra seleccionada
  * @param string $nombre
- * @return string $palabraSeleccionada
+ * @return string $palabraSeleccion
  */
-function palabraSeleccionada($nombre, $arregloPalabras) {
+function palabraSeleccionada($nombre, $arregloPalabras, $arregloPartidas) {
     
     $numero = solicitarNumeroEntre(1, count($arregloPalabras));
-    for ($i = 0; $i < count(cargarPartidas()); $i++) {
-        while (cargarPartidas()[$i]["jugador"] == $nombre && cargarPartidas()[$i]["palabraWordix"] == $arregloPalabras[$numero-1]) {
+    for ($i = 0; $i < count($arregloPartidas); $i++) {
+        while ($arregloPartidas[$i]["jugador"] == $nombre && $arregloPartidas[$i]["palabraWordix"] == $arregloPalabras[$numero-1]) {
             escribirRojo("La palabra seleccionada ya ha sido jugada.");
             echo "\n";
             echo "Elija otro número: ";
             $numero = trim(fgets(STDIN));
         }
     }
-        $palabraSeleccionada = $arregloPalabras[$numero-1];
-    return $palabraSeleccionada;
+        $palabraSeleccion = $arregloPalabras[$numero-1];
+    return $palabraSeleccion;
 }
 
 /** Función para que se seleccione aleatoriamente
@@ -278,22 +289,30 @@ function escribirResumenJugador($arregloPartidas, $nombre)
             }
         }
     }
-    $arregloIntentos = [$intento1, $intento2, $intento3, $intento4, $intento5, $intento6];
- 
+    
      $arregloResumen=[];
+    $partidasCont = 0;
+    $victorias = 0;
+    $puntajeTotal = 0;
      for($i = 0; $i < count($arregloPartidas) ; $i++) {
          if ($arregloPartidas[$i]["jugador"] == $nombre) {
-             $arregloResumen["Jugador"] == $nombre;
-             $arregloResumen["Partidas"] += 1;
-             $arregloResumen["Puntaje Total"] += $arregloPartidas[$i]["puntaje"];
+              $partidasCont++;
+              $puntajeTotal += $arregloPartidas[$i]["puntaje"];
              if (($arregloPartidas[$i]["puntaje"]) > 0) {
-                 $arregloResumen["victorias"] += 1;
+                $victorias++;
              }
          }
      }
      
-     $arregloResumen["Porcentaje Victorias"] == ($arregloResumen["victorias"]/$arregloResumen["Partidas"])*100;
-     $arregloResumen["ADIVINADAS"] = $arregloIntentos;
+        $porcentajeVictorias = ($victorias/$partidasCont)*100;
+     $arregloResumen = [
+        "jugador" => $nombre, "partidas" => $partidasCont, 
+        "puntajeTotal" => $puntajeTotal, "victorias" => $victorias,
+        "porcentaje" => $porcentajeVictorias,
+        "intento1" => $intento1, "intento2" => $intento2, 
+        "intento3" => $intento3, "intento4" => $intento4,
+        "intento5" => $intento5, "intento6" => $intento6
+     ];
      return $arregloResumen;  
 }
 
@@ -435,34 +454,19 @@ function obtenerPuntajeWordix($intentos, $palabra) {
     return $puntajeFinal;
 }
 
-/** Agregar partida a la colección de partidas
- * @param array $partidaActual
- * @param array $coleccionPartidas
- * @param array 
- */
-function agregarPartida($partidaActual, $coleccionDePartida) {
-    $cantPartidas = count($coleccionDePartida);
-    $coleccionDePartida[$cantPartidas] = $partidaActual;
-    return $coleccionDePartida;
-}
 
 
 // PROGRAMA PRINCIPAL
 /* MENÚ DE OPCIONES PARA INTERACTUAR */
 $palabrasActuales = cargarColeccionPalabras();
 $partidas = cargarPartidas();
-$intentosArray = intentosContador($partidas, "pink2000");
-echo "\n" .count($intentosArray). "\n";
-for ($i = 0 ; $i < count($intentosArray) ; $i++) {
-echo "\nIntento " . $i+1 .": " . $intentosArray[$i]. "\n";
-}
 do {
     $opcion = seleccionarOpcion();
     if ($opcion <> -1) {
         switch ($opcion) {
             case 1:
                 $jugador = solicitarJugador(); 
-                $palabraSelec = palabraSeleccionada($jugador, $palabrasActuales);
+                $palabraSelec = palabraSeleccionada($jugador, $palabrasActuales, $partidas);
                 $partida = jugarWordix($palabraSelec, $jugador);
                 $partidas = agregarPartida($partida, $partidas);
                 break;
@@ -478,7 +482,7 @@ do {
             case 4:
                 do {
                     $jugador = solicitarJugador();
-                    if (verificarJugador($jugador, $partidas) == true) {
+                    if (verificarJugador($jugador, $partidas)) {
                         $indicePartida = mostrarPrimerPartida($partidas, $jugador);
                         if($indicePartida == -1){
                             escribirRojo("Este jugador no ganó ninguna partida.");
@@ -502,7 +506,21 @@ do {
                 do {
                     $jugador = solicitarJugador();
                     if (verificarJugador($jugador, $partidas) == true) {
-                        escribirResumenJugador($partidas, $jugador);
+                        $resumen = escribirResumenJugador($partidas, $jugador);
+                        echo "*****************\n";
+                        echo "Jugador: " . $resumen["jugador"];
+                        echo "\nPartidas: " . $resumen["partidas"];
+                        echo "\nPuntaje Total: " . $resumen["puntajeTotal"];
+                        echo "\nVictorias: " . $resumen["victorias"];
+                        echo "\nPorcentaje Victorias: " . $resumen["porcentaje"] . "%";
+                        echo "\nAdivinadas: \n";
+                        echo "          Intento 1: ". $resumen["intento1"] ."\n";
+                        echo "          Intento 2: ". $resumen["intento2"] ."\n";
+                        echo "          Intento 3: ". $resumen["intento3"] ."\n";
+                        echo "          Intento 4: ". $resumen["intento4"] ."\n";
+                        echo "          Intento 5: ". $resumen["intento5"] ."\n";
+                        echo "          Intento 6: ". $resumen["intento6"] ."\n";
+                        echo "*****************\n";
                     }
                     else {
                         escribirRojo("Nombre inválido: El jugador no ha sido encontrado en el sistema.");
